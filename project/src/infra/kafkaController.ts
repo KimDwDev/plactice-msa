@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { logger } from "../config/config.logger.js";
-import { Kafka, type Admin } from "kafkajs";
+import { Kafka, logLevel, type Admin } from "kafkajs";
 import type { Request, Response } from "express";
 
 export class KafkaController {
@@ -15,7 +15,8 @@ export class KafkaController {
   
     this.kafka = new Kafka({
       clientId,
-      brokers
+      brokers,
+      logLevel : logLevel.DEBUG
     });
 
   };
@@ -40,7 +41,7 @@ export class KafkaController {
     } catch (err) {
       logger.log("error", err);
       res.status(500).send({
-        message : "InterServer Error"
+        message : "InterServer Error",
       });
     }
   }
