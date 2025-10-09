@@ -1,0 +1,42 @@
+services:
+  broker:
+    image: apache/kafka:latest
+    container_name: broker
+    ports:
+      - "9092:9092"
+    environment:
+      # KRaft 기본
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+
+      # 바인딩은 0.0.0.0(:포트)로
+      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+
+      # 호스트(개발 PC)에서 붙을 때 광고 주소
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+
+      # 리스너 ↔ 프로토콜 매핑
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+
+      # 단일 노드여도 네트워크에서 보이는 이름 권장
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@broker:9093
+
+      # KRaft 스토리지 포맷에 필요 (예시 값, 그대로 써도 됨)
+      # 임의로 생성하려면: kafka-storage.sh random-uuid
+      KAFKA_CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+
+      # 단일 브로커라 복제 관련은 1로
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_NUM_PARTITIONS: 3
+
+      # 로그 디렉터리(기본과 동일, 명시 추천)
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+    volumes:
+      - kafka-data:/var/lib/kafka/data
+
+volumes:
+  kafka-data:
