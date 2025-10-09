@@ -1,6 +1,7 @@
 import "dotenv/config";
 import { logger } from "../config/config.logger.js";
-import { Kafka } from "kafkajs";
+import { Kafka, type Admin } from "kafkajs";
+import type { Request, Response } from "express";
 
 export class KafkaController {
 
@@ -19,5 +20,29 @@ export class KafkaController {
 
   };
 
+  public async createTopic(req : Request , res : Response) : Promise<void> {
+    try {
+
+      const admin : Admin = this.kafka.admin(); 
+      await admin.connect();
+      await admin.createTopics({
+        topics : [{
+          topic: req.body.topicName?.toString(),
+          numPartitions: parseInt(req.body.noOfPartition),
+          replicationFactor : 1
+        }]
+      });
+      await admin.disconnect();
+      res.send({
+        status : 200,
+        message : "ok"
+      });
+    } catch (err) {
+      logger.log("error", err);
+      res.status(500).send({
+        message : "InterServer Error"
+      });
+    }
+  }
 
 }
