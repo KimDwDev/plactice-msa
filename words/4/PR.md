@@ -4,30 +4,32 @@
 
 - nodejs로 kafka 사용 실습
 
-# 📌 kafka docker 컨테이너화 실습
+# 📌 Kafka Docker 컨테이너화 실습
 
 ## 📖 참고 링크: https://www.youtube.com/watch?v=ik7wP6zZ-wU
 
-- kafka의 경우 여러 broker를 보통 같이 사용함으로 Dockerfile보다는 docker compose를 추천한다.
+- Kafka는 보통 여러 broker를 동시에 사용하므로 Dockerfile보다 docker compose 활용을 권장.
 
-- kafka의 환경변수를 조사 한 후 상황에 맞게 kafka를 빌드해야 한다.
+- Kafka 실행 시 환경 변수를 상황에 맞게 설정해야 함.
 
-- 보통 pulbisher용으로는 broker의 개수를 넉넉하게 잡아서 백업이나 시스템 안정성을 높여야 한다.
+- Publisher 안정성을 위해 broker 수를 넉넉히 확보 → 백업 및 시스템 안정성 강화.
 
-- docker compose exec -it <container이름> <명령어>를 이용해서 해당 container에 집적 shell로 접속할 수 있다.
+- docker compose exec -it <container이름> <명령어> 로 컨테이너 내부에 직접 접속 가능.
 
-- topic과 관련된 명령어는 /opt/kafka/bin/kafka-topics.sh 에 존재하며 controller인 bootstrap을 활용하여 접속할 수 있다.
+- Topic 관련 명령어는 /opt/kafka/bin/kafka-topics.sh 경로에 있으며, controller(bootstrap) 를 통해 접근.
 
-- topic을 생성할 수 있고 partition등을 지정할 수 있다.
+- Topic 생성 및 Partition 지정 가능.
 
-- sql과 마찬가지로 topic이나 partition등을 설계한 후 사용하는 것을 권장한다. (보안 등의 기능도 사용이 가능하다.)
+- SQL 설계처럼 사전에 Topic과 Partition 구조를 기획하고, 보안 옵션도 함께 고려하는 것이 바람직.
 
 # 📌 nodejs로 kafka 사용 실습
 
 ## 📖 참고 링크: https://www.youtube.com/watch?v=dCQvtfATe_M
 
-- 현재 운영 중인 kafka 서버의 외부 ip와 port번호와 클라이언트id를 이용해서 kafka의 접속할 수 있다. 
+- 운영 중인 Kafka 서버의 외부 IP, Port, Client ID 를 기반으로 접속.
 
-- kafkajs를 이용해서 nodejs에서 사용이 가능하고 이를 이용해서 사용이 가능하다.
+- Node.js에서는 KafkaJS 라이브러리를 사용하여 손쉽게 Kafka 연동 가능.
 
-- publisher, consumer를 구독해서 이를 이용해서 사용이 가능하다. ( 추가적인 자료 조사 후 사용 )
+- Producer(Publisher), Consumer(Subscriber)를 통해 메시지를 발행·구독하는 방식으로 사용.
+
+- 추가적인 자료 조사를 통해 활용 범위를 확장할 수 있음.
